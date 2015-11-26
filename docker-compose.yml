@@ -1,0 +1,22 @@
+code:
+    image: centos:7
+    container_name: code
+    volumes:
+        - ./:/code
+    command: /bin/sh -c "while true; do echo hello world > /dev/null; sleep 1; done"
+web:
+    image: trelllis/nginx
+    container_name: web
+    volumes_from:
+        - code
+    ports:
+        - "8000:80"
+    links:
+        - php
+php:
+    image: vinelab/php-fpm
+    container_name: php
+    volumes_from:
+        - code
+    expose:
+        - "9000"
